@@ -1,0 +1,9 @@
+server:
+  port: 7773
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: consumer
