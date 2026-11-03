@@ -18,22 +18,29 @@
     </properties>
 
     <dependencies>
+        <!-- 注册到 Nacos：消费端也要注册，并借助注册中心拿到 provider 的实例列表 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
+        <!-- Ribbon：客户端负载均衡器，配合 @LoadBalanced RestTemplate 按服务名调用并轮询分发请求 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-netflix-ribbon</artifactId>
         </dependency>
+
+        <!-- OpenFeign：声明式 HTTP 客户端，用接口+注解替代手写 HTTP 调用，内部仍走负载均衡 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>

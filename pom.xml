@@ -8,25 +8,30 @@
     <artifactId>Father1</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <!-- ① 聚合工程：父工程 packaging=pom，本身不写业务代码，只通过 modules 聚合子模块，
+         在根目录执行 mvn install 即可一次性构建全部微服务 -->
     <modules>
-        <module>Provider</module>
-        <module>Consumer</module>
-        <module>Gateway</module>
+        <module>Provider</module>  <!-- 服务提供者：注册到 Nacos，对外提供 /provider 接口 -->
+        <module>Consumer</module>  <!-- 服务消费者：通过 Ribbon / OpenFeign 调用 Provider -->
+        <module>Gateway</module>   <!-- API 网关：Spring Cloud Gateway，统一入口 + 路由转发 -->
     </modules>
 
 
+    <!-- ② 版本统一管理：把框架版本号集中定义在这里，一处修改、全局生效，避免各模块版本不一致 -->
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <java.version>1.8</java.version>
+        <java.version>1.8</java.version>           <!-- JDK 版本：以 Java 8 语法编译 -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
-        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
-        <alibaba-cloud.version>2.2.5.RELEASE</alibaba-cloud.version>
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>    <!-- Spring Boot 版本 -->
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>     <!-- Spring Cloud 版本（须与 Boot 版本匹配）-->
+        <alibaba-cloud.version>2.2.5.RELEASE</alibaba-cloud.version><!-- Spring Cloud Alibaba版本（提供 Nacos等）-->
         <mybatis.plus.version>3.3.0</mybatis.plus.version>
     </properties>
 
+    <!-- ③ dependencyManagement + import：引入官方 BOM(依赖清单)，只"锁定版本"、不实际引入依赖；
+         子模块以相同 groupId:artifactId 声明依赖时无需再写版本号，天然保证全工程版本一致 -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -34,7 +39,7 @@
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
-                <scope>import</scope>
+                <scope>import</scope>  <!-- type=pom + scope=import：以"导入 BOM"方式继承该框架的版本清单 -->
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -48,7 +53,7 @@
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
                 <version>${alibaba-cloud.version}</version>
                 <type>pom</type>
-                <scope>import</scope>
+                <scope>import</scope>  <!-- 提供 Nacos discovery/config、Sentinel 等组件的版本管理 -->
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -78,6 +83,7 @@
     </dependencies>
 
 
+    <!-- ④ 镜像仓库：用阿里云 Maven 镜像加速依赖下载；Spring 相关构件走 spring 仓库，国内拉取更快 -->
     <repositories>
         <repository>
             <id>aliyun</id>

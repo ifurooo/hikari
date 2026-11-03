@@ -18,10 +18,13 @@
     </properties>
 
     <dependencies>
+        <!-- Spring Cloud Gateway：基于 WebFlux 的响应式网关，负责统一入口、路由转发、负载均衡、过滤等 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
+
+        <!-- 网关也要注册到 Nacos：才能按服务名(lb://)动态发现下游 provider/consumer 实例并转发 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
