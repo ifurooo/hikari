@@ -1,9 +1,9 @@
 server:
-  port: 7773
+  port: 7772
 spring:
+  application:
+    name: consumer
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
-  application:
-    name: consumer
