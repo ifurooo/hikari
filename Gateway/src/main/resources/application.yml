@@ -1,19 +1,19 @@
 server:
-  port: 7777  # 网关统一入口端口：外部所有请求都先打到这个端口，再按路由规则分发到各微服务
+  port: 7777
 spring:
   application:
-    name: gateway  # 网关自身在 Nacos 中的服务名
+    name: gateway
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848  # 注册到 Nacos，网关才能发现下游 provider/consumer 实例
+        server-addr: localhost:8848
     gateway:
-      routes:             # ★★ 网关路由规则：一条 route = 请求命中该谓词(predicates)时，转发到 uri 指定的目标
-        - id: provider          # 路由唯一标识（自定义，用于区分/管理路由）
-          uri: lb://provider    # 目标地址：lb:// 前缀表示按"服务名"从 Nacos 负载均衡地取出 provider 实例
+      routes:
+        - id: provider
+          uri: lb://provider
           predicates:
-          - Path=/provider/**   # 谓词/断言：凡以 /provider/ 开头的请求，就转发给 provider 服务
+          - Path=/provider/**
         - id: consumer
-          uri: lb://consumer    # lb:// = LoadBalancer：网关侧同样具备负载均衡能力
+          uri: lb://consumer
           predicates:
-          - Path=/consumer/**   # 以 /consumer/ 开头的请求转发给 consumer 服务
+          - Path=/consumer/**
